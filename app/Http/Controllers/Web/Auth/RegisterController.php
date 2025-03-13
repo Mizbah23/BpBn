@@ -12,6 +12,8 @@ use Vanguard\Repositories\User\UserRepository;
 use Vanguard\Support\Enum\UserStatus;
 use Vanguard\User;
 use Illuminate\Support\Facades\Hash;
+use Vanguard\Barber;
+use Vanguard\Bonus;
 
 class RegisterController extends Controller
 {
@@ -41,7 +43,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request, RoleRepository $roles)
     {
-        // dd($request->all());
+      //  dd($request->all());
         $role_id=$roles->findByName('User')->id;
 
         $request->validate([
@@ -53,7 +55,7 @@ class RegisterController extends Controller
         // $user = $this->users->create(
         //     array_merge($request->validFormData(), ['role_id' => $roles->findByName('User')->id])
         // );
-        $codeExists = User::where('promo_code', $request->input_referral_code)->exists();
+        $codeExists = User::where('promo_code', $request->input_referral_code)->first();
         // dd($codeExists);
         if($request->profile_picture)
 		{
@@ -62,6 +64,54 @@ class RegisterController extends Controller
 			 $file->move(storage_path()."/app/public/upload/users/", $user_image);
 		}
 
+        if($request->work_image1)
+		{
+			 $file = $request->file('work_image1');
+			 $work_image1 = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $work_image1);
+		}
+
+        if($request->work_image2)
+		{
+			 $file = $request->file('work_image1');
+			 $work_image2 = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $work_image2);
+		}
+
+        if($request->work_image3)
+		{
+			 $file = $request->file('work_image1');
+			 $work_image3 = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $work_image3);
+		}
+
+        if($request->work_image4)
+		{
+			 $file = $request->file('work_image1');
+			 $work_image4 = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $work_image4);
+		}
+
+        if($request->work_image5)
+		{
+			 $file = $request->file('work_image1');
+			 $work_image5 = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $work_image5);
+		}
+
+        if($request->nid_front)
+		{
+			 $file = $request->file('nid_front');
+			 $nid_front = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $nid_front);
+		}
+
+        if($request->nid_back)
+		{
+			 $file = $request->file('nid_back');
+			 $nid_back = "work".time().'.'.$file->getClientOriginalExtension();
+			 $file->move(storage_path()."/app/public/upload/work/", $nid_back);
+		}
         $lastUser = User::latest('id')->first(); // Get the last inserted user by ID
         $nextId = $lastUser ? $lastUser->id + 1 : 1;
 
@@ -75,11 +125,44 @@ class RegisterController extends Controller
         $user->role_id=$role_id;
         $user->status='Active';
         $user->promo_code=uniqid();
-        if($codeExists==true){
+        if($codeExists){
             $user->input_referral_code=$request->input_referral_code;
         }
         $user->email_verified_at=Carbon::now();
         $user->save();
+
+        $barber=new Barber();
+        $barber->user_id=$user->id;
+        $barber->full_name=$user->first_name;
+        $barber->phone1=$user->phone;
+        $barber->phone2=$request->phone2;
+        $barber->address=$request->address;
+        $barber->work_address=$request->work_address;
+        $barber->gender=$request->gender;
+        $barber->experience=$request->service;
+        $barber->bkash_number=$request->bkash_number;
+        $barber->work_image1=$work_image1??null;
+        $barber->work_image2=$work_image2??null;
+        $barber->work_image3=$work_image3??null;
+        $barber->work_image4=$work_image4??null;
+        $barber->work_image5=$work_image5??null;
+        $barber->nid_front=$nid_front??null;
+        $barber->nid_back=$nid_back??null;
+        $barber->profile_picture=$profile_picture??null;
+        $barber->work_status=$request->work_status;
+        $barber->is_verified=0;
+        $barber->save();
+
+        $bonus= new Bonus();
+        $bonus->user_id=$user->id;
+        $bonus->total_earnings=50;
+        $bonus->total_withdrawals=0;
+        $bonus->save();
+        if($codeExists){
+          $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
+          $newBonus->total_earnings=$codeExists->total_earnings+50;
+          $newBonus->update();
+        }
 
         // event(new Registered($user));
 

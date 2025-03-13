@@ -1,11 +1,11 @@
 <div class="form-group">
-    <label for="email">@lang('Email')</label>
-    <input type="email"
+    <label for="email">@lang('Phone')</label>
+    <input type="text"
            class="form-control input-solid"
-           id="email"
-           name="email"
-           placeholder="@lang('Email')"
-           value="{{ $edit ? $user->email : '' }}">
+           id="phone"
+           name="phone"
+           placeholder="@lang('Phone')"
+           value="{{ $edit ? $user->phone : '' }}" readonly>
 </div>
 
 <div class="form-group">
@@ -15,7 +15,7 @@
            id="username"
            placeholder="(@lang('optional'))"
            name="username"
-           value="{{ $edit ? $user->username : '' }}">
+           value="{{ $edit ? $user->username : '' }}" readonly>
 </div>
 
 <div class="form-group">
