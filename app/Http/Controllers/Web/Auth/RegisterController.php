@@ -44,7 +44,7 @@ class RegisterController extends Controller
      */
     public function register(Request $request, RoleRepository $roles)
     {
-      //  dd($request->all());
+    //    dd($request->all());
         $role_id=$roles->findByName('User')->id;
 
         $request->validate([
@@ -65,41 +65,41 @@ class RegisterController extends Controller
 			 $file->move(storage_path()."/app/public/upload/users/", $user_image);
 		}
 
-        if($request->work_image1)
-		{
-            // dd($request->file('work_image1'));
-			 $file = $request->file('work_image1');
-			 $work_image1 = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $work_image1);
-		}
+        // if($request->work_image1)
+		// {
+        //     // dd($request->file('work_image1'));
+		// 	 $file = $request->file('work_image1');
+		// 	 $work_image1 = "work".time().'.'.$file->getClientOriginalExtension();
+		// 	 $file->move(storage_path()."/app/public/upload/work/", $work_image1);
+		// }
 
-        if($request->work_image2)
-		{
-			 $file = $request->file('work_image2');
-			 $work_image2 = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $work_image2);
-		}
+        // if($request->work_image2)
+		// {
+		// 	 $file = $request->file('work_image2');
+		// 	 $work_image2 = "work".time().'.'.$file->getClientOriginalExtension();
+		// 	 $file->move(storage_path()."/app/public/upload/work/", $work_image2);
+		// }
 
-        if($request->work_image3)
-		{
-			 $file = $request->file('work_image3');
-			 $work_image3 = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $work_image3);
-		}
+        // if($request->work_image3)
+		// {
+		// 	 $file = $request->file('work_image3');
+		// 	 $work_image3 = "work".time().'.'.$file->getClientOriginalExtension();
+		// 	 $file->move(storage_path()."/app/public/upload/work/", $work_image3);
+		// }
 
-        if($request->work_image4)
-		{
-			 $file = $request->file('work_image4');
-			 $work_image4 = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $work_image4);
-		}
+        // if($request->work_image4)
+		// {
+		// 	 $file = $request->file('work_image4');
+		// 	 $work_image4 = "work".time().'.'.$file->getClientOriginalExtension();
+		// 	 $file->move(storage_path()."/app/public/upload/work/", $work_image4);
+		// }
 
-        if($request->work_image5)
-		{
-			 $file = $request->file('work_image5');
-			 $work_image5 = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $work_image5);
-		}
+        // if($request->work_image5)
+		// {
+		// 	 $file = $request->file('work_image5');
+		// 	 $work_image5 = "work".time().'.'.$file->getClientOriginalExtension();
+		// 	 $file->move(storage_path()."/app/public/upload/work/", $work_image5);
+		// }
 
         if($request->nid_front)
 		{
@@ -141,30 +141,26 @@ class RegisterController extends Controller
         $barber->address=$request->address;
         $barber->work_address=$request->work_address;
         $barber->gender=$request->gender;
-        $barber->experience='test';
+        $barber->experience = implode(',', $request->service);
         $barber->bkash_number=$request->bkash_number;
-        $barber->work_image1=$work_image1??null;
-        $barber->work_image2=$work_image2??null;
-        $barber->work_image3=$work_image3??null;
-        $barber->work_image4=$work_image4??null;
-        $barber->work_image5=$work_image5??null;
+        $barber->work_images = $request->work_images;
         $barber->nid_front=$nid_front??null;
         $barber->nid_back=$nid_back??null;
-        $barber->profile_picture=$profile_picture??null;
+        $barber->profile_picture=$user_image;
         $barber->work_status=$request->work_status;
         $barber->is_verified=0;
         $barber->save();
-        dd($barber);
+        // dd($barber);
         $bonus= new Bonus();
         $bonus->user_id=$user->id;
         $bonus->total_earnings=50;
         $bonus->total_withdrawals=0;
         $bonus->save();
-        if($codeExists){
-          $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
-          $newBonus->total_earnings=$codeExists->total_earnings+50;
-          $newBonus->update();
-        }
+        // if($codeExists){
+        //   $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
+        //   $newBonus->total_earnings=$codeExists->total_earnings+50;
+        //   $newBonus->update();
+        // }
 
         // event(new Registered($user));
         DB::commit();
@@ -191,9 +187,9 @@ class RegisterController extends Controller
     if ($request->hasFile('work_images')) {
         $file = $request->file('work_images')[0]; // Single file upload
         $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(public_path('uploads/work_images'), $filename);
+        $file->move(storage_path()."/app/public/upload/work/", $filename);
 
-        return response()->json(['path' => 'uploads/work_images/' . $filename]);
+        return response()->json(['path' => 'upload/work/' . $filename]);
     }
 
     return response()->json(['error' => 'Upload failed'], 400);

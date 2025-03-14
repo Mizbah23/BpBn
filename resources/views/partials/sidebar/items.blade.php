@@ -36,7 +36,7 @@
             <i class="fas fa-user fa-2x"></i>
         @endif
 
-        <span>{{ 'My Profile' }}</span>
+        <span>{{ 'My Submitted Form' }}</span>
     </a>
 
     @if ($item->isDropdown())

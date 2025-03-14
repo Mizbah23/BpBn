@@ -106,9 +106,9 @@ class User extends Authenticatable implements TwoFactorAuthenticatableContract, 
         return $this->hasOne(Bonus::class, 'user_id');
     }
 
-    public function bonuses()
+    public function barber()
     {
-        return $this->hasMany(Bonus::class, 'user_id');
+        return $this->hasOne(Barber::class, 'user_id');
     }
 
     /**
