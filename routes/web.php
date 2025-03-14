@@ -4,6 +4,8 @@
  * Authentication
  */
 
+use Vanguard\Http\Controllers\Web\Auth\RegisterController;
+
 Route::get('login', 'Auth\LoginController@show');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('auth.logout');
@@ -12,6 +14,9 @@ Route::post('check-referral-code', 'Auth\RegisterController@checkCode')->name('c
 Route::group(['middleware' => ['registration', 'guest']], function () {
     Route::get('register', 'Auth\RegisterController@show');
     Route::post('register', 'Auth\RegisterController@register');
+
+    Route::post('/barber/upload-work-images', [RegisterController::class, 'uploadWorkImages'])
+    ->name('barber.uploadWorkImages');
 });
 
 Route::emailVerification();

@@ -3,6 +3,7 @@
 namespace Vanguard\Http\Controllers\Web\Auth;
 
 use Carbon\Carbon;
+use DB;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Vanguard\Http\Controllers\Controller;
@@ -66,6 +67,7 @@ class RegisterController extends Controller
 
         if($request->work_image1)
 		{
+            // dd($request->file('work_image1'));
 			 $file = $request->file('work_image1');
 			 $work_image1 = "work".time().'.'.$file->getClientOriginalExtension();
 			 $file->move(storage_path()."/app/public/upload/work/", $work_image1);
@@ -73,28 +75,28 @@ class RegisterController extends Controller
 
         if($request->work_image2)
 		{
-			 $file = $request->file('work_image1');
+			 $file = $request->file('work_image2');
 			 $work_image2 = "work".time().'.'.$file->getClientOriginalExtension();
 			 $file->move(storage_path()."/app/public/upload/work/", $work_image2);
 		}
 
         if($request->work_image3)
 		{
-			 $file = $request->file('work_image1');
+			 $file = $request->file('work_image3');
 			 $work_image3 = "work".time().'.'.$file->getClientOriginalExtension();
 			 $file->move(storage_path()."/app/public/upload/work/", $work_image3);
 		}
 
         if($request->work_image4)
 		{
-			 $file = $request->file('work_image1');
+			 $file = $request->file('work_image4');
 			 $work_image4 = "work".time().'.'.$file->getClientOriginalExtension();
 			 $file->move(storage_path()."/app/public/upload/work/", $work_image4);
 		}
 
         if($request->work_image5)
 		{
-			 $file = $request->file('work_image1');
+			 $file = $request->file('work_image5');
 			 $work_image5 = "work".time().'.'.$file->getClientOriginalExtension();
 			 $file->move(storage_path()."/app/public/upload/work/", $work_image5);
 		}
@@ -114,7 +116,7 @@ class RegisterController extends Controller
 		}
         $lastUser = User::latest('id')->first(); // Get the last inserted user by ID
         $nextId = $lastUser ? $lastUser->id + 1 : 1;
-
+        DB::beginTransaction();
         $user=new User();
         $user->username=$request->first_name.$nextId;
         $user->password=$request->password;
@@ -134,12 +136,12 @@ class RegisterController extends Controller
         $barber=new Barber();
         $barber->user_id=$user->id;
         $barber->full_name=$user->first_name;
-        $barber->phone1=$user->phone;
-        $barber->phone2=$request->phone2;
+        $barber->phone_1=$user->phone;
+        $barber->phone_2=$request->phone2;
         $barber->address=$request->address;
         $barber->work_address=$request->work_address;
         $barber->gender=$request->gender;
-        $barber->experience=$request->service;
+        $barber->experience='test';
         $barber->bkash_number=$request->bkash_number;
         $barber->work_image1=$work_image1??null;
         $barber->work_image2=$work_image2??null;
@@ -152,7 +154,7 @@ class RegisterController extends Controller
         $barber->work_status=$request->work_status;
         $barber->is_verified=0;
         $barber->save();
-
+        dd($barber);
         $bonus= new Bonus();
         $bonus->user_id=$user->id;
         $bonus->total_earnings=50;
@@ -165,7 +167,7 @@ class RegisterController extends Controller
         }
 
         // event(new Registered($user));
-
+        DB::commit();
         $message =  __('Your account is created successfully!');
 
         \Auth::login($user);
@@ -178,4 +180,22 @@ class RegisterController extends Controller
         $exists = User::where('promo_code', $request->input_referral_code)->exists();
         return response()->json(['valid' => $exists]);
     }
+
+
+    public function uploadWorkImages(Request $request)
+{
+    $request->validate([
+        'work_images.*' => 'image|mimes:jpeg,png,jpg,gif|max:2048'
+    ]);
+
+    if ($request->hasFile('work_images')) {
+        $file = $request->file('work_images')[0]; // Single file upload
+        $filename = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('uploads/work_images'), $filename);
+
+        return response()->json(['path' => 'uploads/work_images/' . $filename]);
+    }
+
+    return response()->json(['error' => 'Upload failed'], 400);
+}
 }

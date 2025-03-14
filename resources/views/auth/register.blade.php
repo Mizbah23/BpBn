@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>বাংলাদেশ প্রফেশনাল বারবারস নেটওয়ার্ক</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -251,13 +253,10 @@
 
                 <div class="mb-3">
                     <label class="form-label">কাজের ৫টি ছবি</label>
-                    <input type="file" class="form-control required" name="work_image1" required>
-                    <input type="file" class="form-control required" name="work_image2" required>
-                    <input type="file" class="form-control required" name="work_image3" required>
-                    <input type="file" class="form-control required" name="work_image4" required>
-                    <input type="file" class="form-control required" name="work_image5" required>
+                    <div id="workImagesDropzone" class="dropzone"></div>
                 </div>
 
+                <input type="hidden" name="work_images" id="workImagesInput">
                 <hr>
 
                 <div class="mb-3">
@@ -427,6 +426,36 @@
         });
     });
     </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.js"></script>
+<script>
+Dropzone.autoDiscover = false;
+
+let uploadedImages = [];
+
+let dropzone = new Dropzone("#workImagesDropzone", {
+    url: "{{ route('barber.uploadWorkImages') }}", // Laravel route for temp upload
+    maxFiles: 5,
+    maxFilesize: 2, // Max size in MB
+    acceptedFiles: "image/*",
+    addRemoveLinks: true,
+    dictRemoveFile: "Remove",
+    paramName: "work_images[]",
+    headers: { 'X-CSRF-TOKEN': document.querySelector('input[name="_token"]').value },
+
+    success: function(file, response) {
+        uploadedImages.push(response.path); // Store uploaded image path
+        document.getElementById('workImagesInput').value = JSON.stringify(uploadedImages);
+    },
+
+    removedfile: function(file) {
+        let name = file.name;
+        uploadedImages = uploadedImages.filter(img => !img.includes(name));
+        document.getElementById('workImagesInput').value = JSON.stringify(uploadedImages);
+        file.previewElement.remove();
+    }
+});
+</script>
 
 </body>
 </html>
