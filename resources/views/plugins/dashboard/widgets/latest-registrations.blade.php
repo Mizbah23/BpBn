@@ -17,7 +17,7 @@
                         <a href="{{ route('users.show', $user) }}" class="d-flex text-dark no-decoration">
                             <img class="rounded-circle" width="40" height="40" src="{{ $user->present()->avatar }}">
                             <div class="ml-2" style="line-height: 1.2;">
-                                <span class="d-block p-0">{{ $user->present()->nameOrEmail }}</span>
+                                <span class="d-block p-0">{{ $user->present()->username.' ('. $user->present()->phone.')' }}</span>
                                 <small class="text-muted">{{ $user->created_at->diffForHumans() }}</small>
                             </div>
                         </a>

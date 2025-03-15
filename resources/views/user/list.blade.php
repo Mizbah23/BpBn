@@ -68,7 +68,7 @@
                     <th></th>
                     <th class="min-width-80">@lang('Username')</th>
                     <th class="min-width-150">@lang('Full Name')</th>
-                    <th class="min-width-100">@lang('Email')</th>
+                    <th class="min-width-100">@lang('Phone')</th>
                     <th class="min-width-80">@lang('Registration Date')</th>
                     <th class="min-width-80">@lang('Status')</th>
                     <th class="text-center min-width-150">@lang('Action')</th>

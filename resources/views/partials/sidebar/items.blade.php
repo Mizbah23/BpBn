@@ -23,7 +23,7 @@
         </ul>
     @endif
 </li>
-
+@if(auth()->user()->role_id==2)
 <li class="nav-item">
     <a class="nav-link {{ Request::is('profile') ? 'active' : '' }}"
        href="{{ route('profile') }}"
@@ -48,4 +48,5 @@
         </ul>
     @endif
 </li>
+@endif
 @endif
