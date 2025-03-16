@@ -39,7 +39,7 @@
             <div class="card-body">
                 <a href="{{ route('profile') }}" class="text-center no-decoration">
                     <div class="icon my-3 display-3 fw-bold">
-                       0 ৳
+                        {{ auth()->user()->bonus->total_withdrawals}} ৳
                     </div>
                     <p class="lead mb-0">@lang('Withdraw Amount')</p>
                 </a>
@@ -51,6 +51,19 @@
 
 
 </div>
+
+<!-- Referral Message -->
+<div class="mt-4 text-center">
+    <div class="alert alert-info p-3 rounded shadow-sm">
+        <h5 class="mb-2">🚀 রেফার করে আরও বেশি আয় করুন! 🎉</h5>
+        <p class="mb-1">
+            আপনার রেফারেল কোড <strong>{{ auth()->user()->promo_code }}</strong> অন্যদের সাথে শেয়ার করুন এবং পুরষ্কার জিতে নিন!
+        </p>
+        <button class="btn btn-primary mt-2" onclick="copyReferralCode()">Copy Code</button>
+    </div>
+</div>
+
+
 @else
 <div class="row">
     @foreach (\Vanguard\Plugins\Vanguard::availableWidgets(auth()->user()) as $widget)
@@ -73,4 +86,13 @@
             {!! app()->call([$widget, 'scripts']) !!}
         @endif
     @endforeach
+
+    <script>
+        function copyReferralCode() {
+            const promoCode = "{{ auth()->user()->promo_code }}";
+            navigator.clipboard.writeText(promoCode).then(() => {
+                alert("Referral code copied!");
+            });
+        }
+    </script>
 @stop

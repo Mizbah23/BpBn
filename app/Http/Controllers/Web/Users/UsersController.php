@@ -120,6 +120,7 @@ class UsersController extends Controller
      */
     public function edit(User $user, CountryRepository $countryRepository, RoleRepository $roleRepository)
     {
+
         return view('user.edit', [
             'edit' => true,
             'user' => $user,

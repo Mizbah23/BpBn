@@ -4,7 +4,7 @@
             <img
                 class="rounded-circle img-responsive"
                 width="40"
-                src="{{ $user->present()->avatar }}"
+                src="{{asset('storage/upload/users/' . $user->avatar) }}"
                 alt="{{ $user->present()->name }}">
         </a>
     </td>
@@ -16,11 +16,26 @@
     <td class="align-middle">{{ $user->first_name . ' ' . $user->last_name }}</td>
     <td class="align-middle">{{ $user->phone }}</td>
     <td class="align-middle">{{ $user->created_at->format(config('app.date_format')) }}</td>
+    @if (isset($user->barber))
     <td class="align-middle">
-        <span class="badge badge-lg badge-{{ $user->present()->labelClass }}">
-            {{ trans("app.status.{$user->status}") }}
+        @if($user->barber->is_verified==0)
+        <span class="badge badge-lg badge-warning">
+            {{ 'Not Verified' }}
         </span>
+        @elseif ($user->barber->is_verified==1)
+        <span class="badge badge-lg badge-success">
+            {{ 'Verification Completed' }}
+        </span>
+        @else
+        <span class="badge badge-lg badge-danger">
+            {{ 'Rejected' }}
+        </span>
+        @endif
     </td>
+    @else
+    <td>{{'Not Valid'}}</td>
+    @endif
+
     <td class="text-center align-middle">
         <div class="dropdown show d-inline-block">
             <a class="btn btn-icon"
@@ -55,8 +70,12 @@
            class="btn btn-icon edit"
            title="@lang('Edit User')"
            data-toggle="tooltip" data-placement="top">
-            <i class="fas fa-edit"></i>
+            <i class="fas fa-eye"></i>
         </a>
+
+
+        @if($user->role_id==2)
+
 
         <a href="{{ route('users.destroy', $user) }}"
            class="btn btn-icon"
@@ -69,5 +88,6 @@
            data-confirm-delete="@lang('Yes, delete him!')">
             <i class="fas fa-trash"></i>
         </a>
+        @endif
     </td>
 </tr>

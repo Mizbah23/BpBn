@@ -16,7 +16,7 @@ class UpdateDetailsRequest extends Request
     {
         return [
             'birthday' => 'nullable|date',
-            'role_id' => 'required|exists:roles,id'
+            'role_id' => 'nullable|exists:roles,id'
         ];
     }
 }

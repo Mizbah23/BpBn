@@ -3,6 +3,8 @@
 namespace Vanguard\Http\Controllers\Web\Users;
 
 use Illuminate\Http\Request;
+use Vanguard\Barber;
+use Vanguard\Bonus;
 use Vanguard\Events\User\Banned;
 use Vanguard\Events\User\UpdatedByAdmin;
 use Vanguard\Http\Controllers\Controller;
@@ -31,21 +33,28 @@ class DetailsController extends Controller
     public function update(User $user, UpdateDetailsRequest $request)
     {
         $data = $request->all();
+        $user=User::find($data['user_id']);
+        $barber=Barber::where('user_id',$data['user_id'])->first();
+        // dd($barber);
+        $barber->is_verified=$data['is_verified'];
+        $barber->update();
 
-        if (! data_get($data, 'country_id')) {
-            $data['country_id'] = null;
+        if($barber->is_verified==1){
+         $bonus=Bonus::where('user_id',$data['user_id'])->first();
+         $bonus->total_withdrawals=50;
+         $bonus->update();
+
+         $referral_user=User::where('promo_code',$user->input_referral_code)->first();
+            if($referral_user){
+                $bonus=Bonus::where('user_id',$referral_user->id)->first();
+                $bonus->total_withdrawals=50;
+                $bonus->update();
+            }
         }
 
-        $this->users->update($user->id, $data);
-        $this->users->setRole($user->id, $request->role_id);
 
-        event(new UpdatedByAdmin($user));
 
-        // If user status was updated to "Banned",
-        // fire the appropriate event.
-        if ($this->userWasBanned($user, $request)) {
-            event(new Banned($user));
-        }
+
 
         return redirect()->back()
             ->withSuccess(__('User updated successfully.'));

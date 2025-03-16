@@ -156,11 +156,11 @@ class RegisterController extends Controller
         $bonus->total_earnings=50;
         $bonus->total_withdrawals=0;
         $bonus->save();
-        // if($codeExists){
-        //   $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
-        //   $newBonus->total_earnings=$codeExists->total_earnings+50;
-        //   $newBonus->update();
-        // }
+        if($codeExists){
+          $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
+          $newBonus->total_earnings=$codeExists->total_earnings+50;
+          $newBonus->update();
+        }
 
         // event(new Registered($user));
         DB::commit();
