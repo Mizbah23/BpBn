@@ -78,7 +78,7 @@ class UserAvatarManager
      */
     private function getDestinationDirectory()
     {
-        return 'storage/app/public/upload/users';
+        return '/upload/users';
     }
 
     /**
@@ -129,7 +129,7 @@ class UserAvatarManager
         $this->fs->put(
             $fileName,
             $image->stream(null, 100)->__toString(),
-            'storage'
+            'public'
         );
 
         return basename($fileName);

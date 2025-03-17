@@ -84,7 +84,7 @@
         <div class="row" id="uploadedNidFrontContainer">
             @if($edit && !empty($user->barber->nid_front))
                 <div class="col-md-12 mb-3">
-                    <img src="{{ asset('storage/upload/work/' .$user->barber->nid_front) }}"
+                    <img src="{{ asset('app/public/upload/work/' .$user->barber->nid_front) }}"
                          class="img-thumbnail"
                          style="width: 100%; max-width: 500px; height: 250px; object-fit: cover;">
                 </div>
@@ -99,7 +99,7 @@
         <div class="row" id="uploadedNidBackContainer">
             @if($edit && !empty($user->barber->nid_back))
                 <div class="col-md-12 mb-3">
-                    <img src="{{ asset('storage/upload/work/' .$user->barber->nid_back) }}"
+                    <img src="{{ asset('app/public/upload/work/' .$user->barber->nid_back) }}"
                          class="img-thumbnail"
                          style="width: 100%; max-width: 500px; height: 250px; object-fit: cover;">
                 </div>
@@ -116,7 +116,7 @@
             @if($edit && !empty($user->barber->work_images))
                 @foreach(json_decode($user->barber->work_images, true) as $image)
                     <div class="col-md-3 mb-3"> <!-- Increased column width -->
-                        <img src="{{ asset('storage/'.$image) }}"
+                        <img src="{{ asset('app/public/'.$image) }}"
                              class="img-thumbnail"
                              style="width: 100%; max-width: 300px; height: 200px; object-fit: cover;">
                     </div>

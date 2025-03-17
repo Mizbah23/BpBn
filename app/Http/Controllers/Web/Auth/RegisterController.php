@@ -56,13 +56,13 @@ class RegisterController extends Controller
         // $user = $this->users->create(
         //     array_merge($request->validFormData(), ['role_id' => $roles->findByName('User')->id])
         // );
-        $codeExists = User::where('promo_code', $request->input_referral_code)->first();
+        $codeExists = User::where('promo_code', $request->input_referral_code)->exists();
         // dd($codeExists);
         if($request->profile_picture)
 		{
 			 $file = $request->file('profile_picture');
 			 $user_image = "profile".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/users/", $user_image);
+             $file->move(public_path()."/upload/users/", $user_image);
 		}
 
         // if($request->work_image1)
@@ -105,14 +105,14 @@ class RegisterController extends Controller
 		{
 			 $file = $request->file('nid_front');
 			 $nid_front = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $nid_front);
+             $file->move(public_path()."/app/public/upload/work/", $nid_front);
 		}
 
         if($request->nid_back)
 		{
 			 $file = $request->file('nid_back');
 			 $nid_back = "work".time().'.'.$file->getClientOriginalExtension();
-			 $file->move(storage_path()."/app/public/upload/work/", $nid_back);
+             $file->move(public_path()."/app/public/upload/work/", $nid_back);
 		}
         $lastUser = User::latest('id')->first(); // Get the last inserted user by ID
         $nextId = $lastUser ? $lastUser->id + 1 : 1;
@@ -126,7 +126,7 @@ class RegisterController extends Controller
         $user->address=$request->address;
         $user->role_id=$role_id;
         $user->status='Active';
-        $user->promo_code=uniqid();
+        $user->promo_code=str_pad(mt_rand(0, 9999), 4, '0', STR_PAD_LEFT);
         if($codeExists){
             $user->input_referral_code=$request->input_referral_code;
         }
@@ -156,11 +156,12 @@ class RegisterController extends Controller
         $bonus->total_earnings=50;
         $bonus->total_withdrawals=0;
         $bonus->save();
-        if($codeExists){
-          $newBonus=Bonus::where('user_id',$codeExists->user_id)->first();
-          $newBonus->total_earnings=$codeExists->total_earnings+50;
-          $newBonus->update();
-        }
+        // if($codeExists){
+        //   $code = User::where('promo_code', $request->input_referral_code)->first();
+        //   $newBonus=Bonus::where('user_id',$code->user_id)->first();
+        //   $newBonus->total_earnings=$newBonus->total_earnings+50;
+        //   $newBonus->update();
+        // }
 
         // event(new Registered($user));
         DB::commit();
@@ -187,7 +188,7 @@ class RegisterController extends Controller
     if ($request->hasFile('work_images')) {
         $file = $request->file('work_images')[0]; // Single file upload
         $filename = time() . '_' . $file->getClientOriginalName();
-        $file->move(storage_path()."/app/public/upload/work/", $filename);
+        $file->move(public_path()."/app/public/upload/work/", $filename);
 
         return response()->json(['path' => 'upload/work/' . $filename]);
     }

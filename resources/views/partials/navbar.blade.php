@@ -68,10 +68,10 @@
                    data-toggle="dropdown"
                    aria-haspopup="true"
                    aria-expanded="false">
-                    <img src="{{ asset('storage/upload/users/' . auth()->user()->avatar) }}"
-                         width="50"
-                         height="50"
-                         class="rounded-circle img-thumbnail img-responsive">
+                   <img src="{{ auth()->user()->present()->avatar }}"
+                   width="50"
+                   height="50"
+                   class="rounded-circle img-thumbnail img-responsive">
                 </a>
                 <div class="dropdown-menu dropdown-menu-right position-absolute p-0" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item py-2" href="{{ route('profile') }}">

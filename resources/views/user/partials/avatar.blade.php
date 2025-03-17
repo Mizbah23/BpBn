@@ -6,12 +6,13 @@
     </div>
     <div id="avatar"></div>
     <div class="text-center">
+
         <div class="avatar-preview">
             <img class="avatar rounded-circle img-thumbnail img-responsive mt-5 mb-4"
                  width="150"
-                 src="{{ $edit ? asset('storage/upload/users/' . auth()->user()->avatar) : url('assets/img/profile.png') }}">
+                 src="{{ $edit ? $user->present()->avatar : url('assets/img/profile.png') }}">
 
-            <h5 class="text-muted">{{ $user->present()->nameOrEmail }}</h5>
+            <h5 class="text-muted">{{ $user->present()->username }}</h5>
         </div>
 
         <div id="change-picture"
