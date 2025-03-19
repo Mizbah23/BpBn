@@ -156,12 +156,18 @@ class RegisterController extends Controller
         $bonus->total_earnings=50;
         $bonus->total_withdrawals=0;
         $bonus->save();
-        // if($codeExists){
-        //   $code = User::where('promo_code', $request->input_referral_code)->first();
-        //   $newBonus=Bonus::where('user_id',$code->user_id)->first();
-        //   $newBonus->total_earnings=$newBonus->total_earnings+50;
-        //   $newBonus->update();
-        // }
+        if($codeExists){
+            $referral_user = User::where('promo_code', $user->input_referral_code)->first();
+
+            if ($referral_user) {
+                $bonus = Bonus::where('user_id', $referral_user->id)->first();
+
+                if ($bonus) {
+                    $bonus->total_earnings += 50; // Add 50 to the current total_earnings
+                    $bonus->update();
+                }
+            }
+        }
 
         // event(new Registered($user));
         DB::commit();

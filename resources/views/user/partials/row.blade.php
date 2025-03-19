@@ -4,12 +4,12 @@
             <img
                 class="rounded-circle img-responsive"
                 width="40"
-                src="{{asset('storage/upload/users/' . $user->avatar) }}"
-                alt="{{ $user->present()->name }}">
+                src="{{ $user->present()->avatar }}"
+                alt="{{ $user->present()->username }}">
         </a>
     </td>
     <td class="align-middle">
-        <a href="{{ route('users.show', $user) }}">
+        <a href="{{ route('users.edit', $user) }}">
             {{ $user->username ?: __('N/A') }}
         </a>
     </td>

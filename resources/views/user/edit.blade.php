@@ -86,6 +86,7 @@
                             @method('PUT')
                             @include('user.partials.auth')
                         </form>
+
                     </div>
 
                     @if (setting('2fa.enabled'))
@@ -117,6 +118,19 @@
                 </form>
             </div>
         </div>
+        @if($user->barber->is_verified==1)
+        <div class="card">
+            <div class="card-body">
+                <div class="spinner-grow text-danger" role="status">
+                    <span class="visually-hidden"></span>
+
+                  </div>
+                  <h4>Your Request has been successfully verified. </h4>
+
+            </div>
+        </div>
+
+        @endif
     </div>
 </div>
 
@@ -131,4 +145,6 @@
     @if (setting('2fa.enabled'))
         {!! JsValidator::formRequest('Vanguard\Http\Requests\TwoFactor\EnableTwoFactorRequest', '#two-factor-form') !!}
     @endif
+
+
 @stop

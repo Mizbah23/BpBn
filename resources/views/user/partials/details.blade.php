@@ -127,18 +127,42 @@
         </div>
     </div>
 
-    @if (Auth::user()->role_id==1)
+    @if (Auth::user()->role_id == 1)
     <div class="col-md-12">
         <div class="form-group">
             <label for="verify">@lang('Verify User')</label>
-            <select class="form-control input-solid" id="is_verified"
-            name="is_verified">
-            <option value=1>Success</option>
-            <option value=2>Rejected</option>
+            <select class="form-control input-solid" id="is_verified" name="is_verified" onchange="toggleMessageField()">
+                <option value="">Pending</option>
+                <option value="1" {{ ($user->barber->is_verified == 1) ? 'selected' : '' }}>Success</option>
+                <option value="2" {{ ($user->barber->is_verified == 2) ? 'selected' : '' }}>Rejected</option>
             </select>
-
         </div>
     </div>
+
+    <div class="col-md-12" id="messageField" style="display: none;">
+        <div class="form-group">
+            <label for="message">@lang('Rejection Message')</label>
+            <textarea class="form-control" id="message" name="message">{{ $user->barber->message ?? '' }}</textarea>
+        </div>
+    </div>
+
+    <script>
+        function toggleMessageField() {
+            var selectElement = document.getElementById('is_verified');
+            var messageField = document.getElementById('messageField');
+
+            if (selectElement.value == "2") {
+                messageField.style.display = "block";
+            } else {
+                messageField.style.display = "none";
+            }
+        }
+
+        // Run on page load in case "Rejected" is already selected
+        document.addEventListener("DOMContentLoaded", function() {
+            toggleMessageField();
+        });
+    </script>
     @endif
 
     @if (Auth::user()->role_id==2)
