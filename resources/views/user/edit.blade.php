@@ -129,7 +129,22 @@
 
             </div>
         </div>
+        @elseif($user->barber->is_verified==0)
+        <div class="card">
+            <div class="card-body">
 
+                  <h4>Your Request has been pending. </h4>
+
+            </div>
+        </div>
+        @else
+        <div class="card">
+            <div class="card-body">
+
+                  <h4>Your Request has been rejected. </h4>
+
+            </div>
+        </div>
         @endif
     </div>
 </div>

@@ -151,4 +151,58 @@ class UsersController extends Controller
         return redirect()->route('users.index')
             ->withSuccess(__('User deleted successfully.'));
     }
+
+    public function smsSend()
+    {
+        $users = User::all();
+        // dd($users);
+
+
+        return view('user.sms', compact('users'));
+    }
+
+    public function smsSendPost(Request $request){
+        //  dd($request->all());
+         if($request->status==""){
+            $users=User::leftjoin('barbers','barbers.user_id','=','users.id')->where('barbers.is_verified',0)->get();
+         }elseif($request->status==2){
+            $users=User::leftjoin('barbers','barbers.user_id','=','users.id')->where('barbers.is_verified',2)->get();
+         }elseif($request->status==1){
+            $users=User::leftjoin('barbers','barbers.user_id','=','users.id')->where('barbers.is_verified',1)->get();
+         }else{
+            $users=User::all();
+         }
+
+         $c=count($users);
+
+         for ($i=0; $i < $c; $i++) {
+
+         $api_url = "http://bulksmsbd.net/api/smsapi?api_key=IBPJuXuI2JXlzglJkS3Z&type=text&senderid=8809617613089";
+
+
+         $text=$request->message;
+
+
+             // dd($text);
+         $url = $api_url;
+         $number=$users[$i]->phone;//"88017,88018,88019";
+         $data= array(
+         'number'=>"$number",
+         'message'=>"$text"
+         );
+         // dd($data);
+         $ch = curl_init(); // Initialize cURL
+         curl_setopt($ch, CURLOPT_URL,$url);
+         curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($data));
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+         $smsresult = curl_exec($ch);
+         $p = explode("|",$smsresult);
+         // // dd($p);
+         $sendstatus = $p[0];
+         $r=json_decode($sendstatus);
+
+         }
+         return redirect()->back()
+         ->withSuccess(__('Message hase been sent to '.$c.' users.'));
+    }
 }

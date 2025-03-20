@@ -8,14 +8,21 @@
                 alt="{{ $user->present()->username }}">
         </a>
     </td>
-    <td class="align-middle">
-        <a href="{{ route('users.edit', $user) }}">
-            {{ $user->username ?: __('N/A') }}
-        </a>
-    </td>
-    <td class="align-middle">{{ $user->first_name . ' ' . $user->last_name }}</td>
+
+    <td class="align-middle"> <a href="{{ route('users.edit', $user) }}">{{ $user->first_name . ' ' . $user->last_name }}</a></td>
     <td class="align-middle">{{ $user->phone }}</td>
     <td class="align-middle">{{ $user->created_at->format(config('app.date_format')) }}</td>
+    <td class="align-middle">
+                             @if($user->role_id==2)
+                              {{ strtoupper($user->barber->work_status) }}
+                              @else
+                              {{'Not Valid'}}
+                             @endif
+    </td>
+
+    <td class="align-middle">{{ isset($user->bonus)? $user->bonus->total_earnings:'Not Valid' }}</td>
+    <td class="align-middle">{{ isset($user->bonus)? $user->bonus->total_withdrawals:'Not Valid' }}</td>
+    <td class="align-middle">{{ isset($user->bonus)? $user->bonus->total_earnings - $user->bonus->total_withdrawals:'Not Valid' }}</td>
     @if (isset($user->barber))
     <td class="align-middle">
         @if($user->barber->is_verified==0)

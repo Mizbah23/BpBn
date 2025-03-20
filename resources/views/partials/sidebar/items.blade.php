@@ -14,6 +14,8 @@
         <span>{{ $item->getTitle() }}</span>
     </a>
 
+
+
     @if ($item->isDropdown())
         <ul class="{{ Request::is($item->getExpandedPath()) ? '' : 'collapse' }} list-unstyled sub-menu"
             id="{{ str_replace('#', '', $item->getHref()) }}">
@@ -23,6 +25,20 @@
         </ul>
     @endif
 </li>
+{{-- <li class="nav-item">
+    <a class="nav-link {{ Request::is('sms') ? 'active' : '' }}"
+        href="{{ route('send.sms') }}"
+
+
+     >
+
+             <i class="fa fa-comment"></i>
+
+
+         <span>Send SMS</span>
+     </a>
+
+</li> --}}
 @if(auth()->user()->role_id==2)
 <li class="nav-item">
     <a class="nav-link {{ Request::is('profile') ? 'active' : '' }}"

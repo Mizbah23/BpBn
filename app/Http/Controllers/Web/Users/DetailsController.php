@@ -32,7 +32,9 @@ class DetailsController extends Controller
      */
     public function update(User $user, UpdateDetailsRequest $request)
     {
+
         $data = $request->all();
+
         $user=User::find($data['user_id']);
         $barber=Barber::where('user_id',$data['user_id'])->first();
         // dd($barber);
@@ -64,22 +66,22 @@ class DetailsController extends Controller
 
 		// return $p;
 
-        if($barber->is_verified==1){
-         $bonus=Bonus::where('user_id',$data['user_id'])->first();
-         $bonus->total_withdrawals=50;
-         $bonus->update();
+        // if($barber->is_verified==1){
+        //  $bonus=Bonus::where('user_id',$data['user_id'])->first();
+        //  $bonus->total_withdrawals=50;
+        //  $bonus->update();
 
-         $referral_user = User::where('promo_code', $user->input_referral_code)->first();
+        //  $referral_user = User::where('promo_code', $user->input_referral_code)->first();
 
-         if ($referral_user) {
-             $bonus = Bonus::where('user_id', $referral_user->id)->first();
+        //  if ($referral_user) {
+        //      $bonus = Bonus::where('user_id', $referral_user->id)->first();
 
-             if ($bonus) {
-                 $bonus->total_withdrawals += 50; // Add 50 to the current total_earnings
-                 $bonus->update();
-             }
-         }
-        }
+        //      if ($bonus) {
+        //          $bonus->total_withdrawals += 50; // Add 50 to the current total_earnings
+        //          $bonus->update();
+        //      }
+        //  }
+        // }
 
 
 

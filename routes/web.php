@@ -109,6 +109,12 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
     Route::resource('users', 'Users\UsersController')
         ->except('update')->middleware('permission:users.manage');
 
+    Route::get('sms', 'Users\UsersController@smsSend')
+        ->name('send.sms')->middleware('permission:users.manage');
+
+    Route::post('sms', 'Users\UsersController@smsSendPost')
+        ->name('send.sms.post')->middleware('permission:users.manage');
+
     Route::group(['prefix' => 'users/{user}', 'middleware' => 'permission:users.manage'], function () {
         Route::put('update/details', 'Users\DetailsController@update')->name('users.update.details');
         Route::put('update/login-details', 'Users\LoginDetailsController@update')

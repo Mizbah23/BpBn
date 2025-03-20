@@ -106,8 +106,46 @@
 
 @else
 <div class="row">
+    <div class="col-md-6">
+        <div class="card widget">
+            <div class="card-body">
+                <div class="row">
+                    <div class="p-3 text-primary flex-1">
+                        <i class="fa fa-cart-arrow-down fa-3x"></i>
+                    </div>
+                    @php
+                    $total_deposit=Vanguard\User::leftjoin('bonuses','bonuses.user_id','=','users.id')->sum('total_earnings');
+                    @endphp
+                    <div class="pr-3">
+                        <h2 class="text-right">{{ number_format($total_deposit) }}</h2>
+                        <div class="text-muted">@lang('Total Deposit')</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card widget">
+            <div class="card-body">
+                <div class="row">
+                    <div class="p-3 text-primary flex-1">
+                        <i class="fa fa-share fa-3x"></i>
+                    </div>
+                    @php
+                    $total_withdraws=Vanguard\User::leftjoin('bonuses','bonuses.user_id','=','users.id')->sum('total_withdrawals');
+                    @endphp
+                    <div class="pr-3">
+                        <h2 class="text-right">{{ number_format($total_withdraws) }}</h2>
+                        <div class="text-muted">@lang('Total Withdraw')</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     @foreach (\Vanguard\Plugins\Vanguard::availableWidgets(auth()->user()) as $widget)
         @if ($widget->width)
+
             <div class="col-md-{{ $widget->width }}">
         @endif
             {!! app()->call([$widget, 'render']) !!}
@@ -115,6 +153,7 @@
             </div>
         @endif
     @endforeach
+
 </div>
 @endif
 
@@ -122,6 +161,7 @@
 
 @section('scripts')
     @foreach (\Vanguard\Plugins\Vanguard::availableWidgets(auth()->user()) as $widget)
+        {{-- @dd($widget) --}}
         @if (method_exists($widget, 'scripts'))
             {!! app()->call([$widget, 'scripts']) !!}
         @endif

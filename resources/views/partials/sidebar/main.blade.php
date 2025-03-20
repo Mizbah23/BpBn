@@ -31,6 +31,22 @@
             @foreach (\Vanguard\Plugins\Vanguard::availablePlugins() as $plugin)
                 @include('partials.sidebar.items', ['item' => $plugin->sidebar()])
             @endforeach
+            @if(auth()->user()->role_id==1)
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('sms') ? 'active' : '' }}"
+                    href="{{ route('send.sms') }}"
+
+
+                 >
+
+                         <i class="fa fa-comment"></i>
+
+
+                     <span>Send SMS</span>
+                 </a>
+
+            </li>
+            @endif
         </ul>
     </div>
 </nav>

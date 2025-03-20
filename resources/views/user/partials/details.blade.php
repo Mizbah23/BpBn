@@ -5,22 +5,22 @@
             <input type="hidden" name="user_id" value="{{$edit ?$user->id :''}}">
             <label for="first_name">@lang('First Name')</label>
             <input type="text" class="form-control input-solid" id="first_name"
-                   name="first_name" placeholder="@lang('First Name')" value="{{ $edit ? $user->first_name : '' }}" readonly>
+                   name="first_name" placeholder="@lang('First Name')" value="{{ $edit ? $user->first_name : '' }}" >
         </div>
         <div class="form-group">
             <label for="last_name">@lang('Regular Phone')</label>
             <input type="text" class="form-control input-solid" id="phone"
-                   name="phone" placeholder="@lang('Last Name')" value="{{ $edit ? $user->barber->phone_1 : '' }}" readonly>
+                   name="phone" placeholder="@lang('Last Name')" value="{{ $edit ? $user->barber->phone_1 : '' }}">
         </div>
         <div class="form-group">
             <label for="address">@lang('Working Address')</label>
             <input type="text" class="form-control input-solid" id="address"
-                   name="address" placeholder="@lang('Address')" value="{{ $edit ? $user->barber->work_address : '' }}" readonly>
+                   name="address" placeholder="@lang('Address')" value="{{ $edit ? $user->barber->work_address : '' }}">
         </div>
         <div class="form-group">
             <label>@lang('Experience')</label>
             <input type="text" class="form-control input-solid" id="experience"
-            name="experience" placeholder="@lang('Experience')" value="{{ $user->barber->experience }}" readonly>
+            name="experience" placeholder="@lang('Experience')" value="{{ $user->barber->experience }}">
 
         </div>
     </div>
@@ -29,25 +29,32 @@
         <div class="form-group">
             <label for="birthday">@lang('Gender')</label>
             <div class="form-group">
-                <input type="text"
-                       value="{{ $edit ? $user->barber->gender:''  }}"
-                       class="form-control input-solid"  readonly/>
+
+                       <select class="form-control input-solid" id="gender" name="gender">
+
+                        <option value="male" {{ ($user->barber->gender == "male") ? 'selected' : '' }}>Male</option>
+                        <option value="female" {{ ($user->barber->gender== "female") ? 'selected' : '' }}>Female</option>
+                    </select>
             </div>
         </div>
         <div class="form-group">
             <label for="phone">@lang('Alternative Phone')</label>
             <input type="text" class="form-control input-solid" id="phone_2"
-                   name="phone_2" placeholder="@lang('Phone')" value="{{ $edit ? $user->barber->phone_2 : '' }}" readonly>
+                   name="phone_2" placeholder="@lang('Phone')" value="{{ $edit ? $user->barber->phone_2 : '' }}">
         </div>
         <div class="form-group">
             <label for="address">@lang('Address')</label>
             <input type="text" class="form-control input-solid" id="address"
-                   name="address" placeholder="@lang('Address')" value="{{ $edit ? $user->address : '' }}" readonly>
+                   name="address" placeholder="@lang('Address')" value="{{ $edit ? $user->address : '' }}">
         </div>
         <div class="form-group">
             <label for="address">@lang('Work Status')</label>
-            <input type="text" class="form-control input-solid" id="work_status"
-            name="work_status" placeholder="@lang('Work Status')" value="{{ $edit ? $user->barber->work_status : '' }}" readonly>
+            <select class="form-control input-solid" id="work_status" name="work_status">
+
+                <option value="yes" {{ ($user->barber->work_status == "yes") ? 'selected' : '' }}>Yes</option>
+                <option value="no" {{ ($user->barber->work_status== "no") ? 'selected' : '' }}>No</option>
+            </select>
+
         </div>
     </div>
 
@@ -56,7 +63,7 @@
         <div class="form-group">
             <label for="phone">@lang('BKash Number')</label>
             <input type="text" class="form-control input-solid" id="bkash"
-                   name="bkash" placeholder="@lang('BKash')" value="{{ $edit ? $user->barber->bkash_number : '' }}" readonly>
+                   name="bkash" placeholder="@lang('BKash')" value="{{ $edit ? $user->barber->bkash_number : '' }}">
         </div>
     </div>
 
@@ -112,12 +119,14 @@
 
     <div class="col-md-12">
         <label>@lang('Uploaded Work Images')</label>
-        <div class="row" id="uploadedWorkImagesContainer">
+        <form action="{{ route('barber.uploadWorkImages') }}" class="dropzone" id="workImagesDropzone">
+            @csrf
+        </form>
+        <div class="row mt-3" id="uploadedWorkImagesContainer">
             @if($edit && !empty($user->barber->work_images))
                 @foreach(json_decode($user->barber->work_images, true) as $image)
-                    <div class="col-md-3 mb-3"> <!-- Increased column width -->
-                        <img src="{{ asset('app/public/'.$image) }}"
-                             class="img-thumbnail"
+                    <div class="col-md-3 mb-3">
+                        <img src="{{ asset('app/public/'.$image) }}" class="img-thumbnail"
                              style="width: 100%; max-width: 300px; height: 200px; object-fit: cover;">
                     </div>
                 @endforeach
