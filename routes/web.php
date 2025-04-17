@@ -4,7 +4,10 @@
  * Authentication
  */
 
+use Vanguard\Http\Controllers\Api\Profile\DetailsController as ProfileDetailsController;
 use Vanguard\Http\Controllers\Web\Auth\RegisterController;
+use Vanguard\Http\Controllers\Web\Profile\DetailsController as WebProfileDetailsController;
+use Vanguard\Http\Controllers\Web\Users\DetailsController;
 
 Route::get('login', 'Auth\LoginController@show');
 Route::post('login', 'Auth\LoginController@login');
@@ -62,6 +65,9 @@ Route::group(['middleware' => ['auth', 'verified']], function () {
         Route::get('/', 'ProfileController@show')->name('profile');
         Route::get('activity', 'ActivityController@show')->name('profile.activity');
         Route::put('details', 'DetailsController@update')->name('profile.update.details');
+
+        Route::post('/barber/uploadWorkImages', [DetailsController::class, 'uploadWorkImages'])->name('barber.uploadWorkImages');
+
 
         Route::post('avatar', 'AvatarController@update')->name('profile.update.avatar');
         Route::post('avatar/external', 'AvatarController@updateExternal')

@@ -68,10 +68,10 @@
                          id="details"
                          role="tabpanel"
                          aria-labelledby="nav-home-tab">
-                        <form action="{{ route('users.update.details', $user) }}" method="POST" id="details-form">
+                        <form action="{{ route('users.update.details', $user) }}" method="POST" id="details-form" enctype="multipart/form-data" >
                             @csrf
                             @method('PUT')
-                            @include('user.partials.details', ['profile' => false])
+                            @include('user.partials.details', ['profile' => true])
                         </form>
                     </div>
 
@@ -83,7 +83,7 @@
                               method="POST"
                               id="login-details-form">
                             @csrf
-                            @method('PUT')
+                            {{-- @method('PUT') --}}
                             @include('user.partials.auth')
                         </form>
 
@@ -152,6 +152,7 @@
 @stop
 
 @section('scripts')
+
     {!! HTML::script('assets/js/as/btn.js') !!}
     {!! HTML::script('assets/js/as/profile.js') !!}
     {!! JsValidator::formRequest('Vanguard\Http\Requests\User\UpdateDetailsRequest', '#details-form') !!}

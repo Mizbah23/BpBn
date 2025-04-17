@@ -11,7 +11,8 @@
 
 @section('content')
     @include('partials.messages')
-    @if(auth()->user()->role_id==2 && auth()->user()->barber->is_verified==0)
+    @if(auth()->user()->role_id==2)
+    @if(auth()->user()->barber->is_verified==0)
     <div class="alert alert-warning d-flex align-items-center">
         <div class="spinner-grow spinner-border-sm me-2" role="status">
             <span class="visually-hidden"></span>
@@ -20,6 +21,16 @@
             আপনার পূরণকৃত ফর্মটি বর্তমানে পর্যালোচনা করা হচ্ছে। পর্যালোচনা করার পর আপনার ফরমে পূরণকৃত বিকাশ নম্বরে রিওয়ার্ড পেয়ে যাবেন।
         </span>
     </div>
+    @elseif(auth()->user()->barber->is_verified==2)
+    <div class="alert alert-warning d-flex align-items-center">
+        <div class="spinner-grow spinner-border-sm me-2" role="status">
+            <span class="visually-hidden"></span>
+        </div>
+        <span>
+            দুঃখিত! আপনার ফর্মটি পর্যালোচনা করার পরে কিছু সমস্যা পাওয়া গেছে। অনুগ্রহ করে ফর্মটি পুনরায় জমা দিন।  <a href="{{route('profile')}}"><button class="btn btn-primary mt-2">এখানে ক্লিক করুন</button></a>
+        </span>
+    </div>
+    @endif
     @endif
 {{-- @dd( auth()->user()->role_id) --}}
 @if(auth()->user()->role_id==2)

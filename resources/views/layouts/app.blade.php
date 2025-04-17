@@ -21,8 +21,9 @@
     <link media="all" type="text/css" rel="stylesheet" href="{{ url(mix('assets/css/vendor.css')) }}">
     <link media="all" type="text/css" rel="stylesheet" href="{{ url(mix('assets/css/app.css')) }}">
 
-    @yield('styles')
 
+    @yield('styles')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.3/dropzone.min.css">
     @hook('app:styles')
 </head>
 <body>
@@ -42,33 +43,7 @@
 
     <script src="{{ url(mix('assets/js/vendor.js')) }}"></script>
     <script src="{{ url('assets/js/as/app.js') }}"></script>
-    {{-- <script>
-        Dropzone.options.workImagesDropzone = {
-      paramName: "file",
-      maxFilesize: 2,
-      acceptedFiles: "image/*",
-      dictDefaultMessage: "Drag & Drop or Click to Upload Work Images",
-      init: function () {
-          let dropzone = this;
-          @if($edit && !empty($user->barber->work_images))
-              @foreach(json_decode($user->barber->work_images, true) as $image)
-                  let mockFile = { name: "Work Image", size: 12345 };
-                  dropzone.emit("addedfile", mockFile);
-                  dropzone.emit("thumbnail", mockFile, "{{ asset('storage/'.$image) }}");
-                  dropzone.emit("complete", mockFile);
-              @endforeach
-          @endif
-      },
-      success: function (file, response) {
-          let uploadedImagesContainer = document.getElementById("uploadedWorkImagesContainer");
-          let newImage = document.createElement("div");
-          newImage.classList.add("col-md-3", "mb-3");
-          newImage.innerHTML = `<img src="${response.filePath}" class="img-thumbnail"
-                                  style="width: 100%; max-width: 300px; height: 200px; object-fit: cover;">`;
-          uploadedImagesContainer.appendChild(newImage);
-      }
-  };
-  </script>` --}}
+
     @yield('scripts')
 
     @hook('app:scripts')

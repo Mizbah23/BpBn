@@ -119,9 +119,7 @@
 
     <div class="col-md-12">
         <label>@lang('Uploaded Work Images')</label>
-        <form action="{{ route('barber.uploadWorkImages') }}" class="dropzone" id="workImagesDropzone">
-            @csrf
-        </form>
+
         <div class="row mt-3" id="uploadedWorkImagesContainer">
             @if($edit && !empty($user->barber->work_images))
                 @foreach(json_decode($user->barber->work_images, true) as $image)
@@ -135,6 +133,16 @@
             @endif
         </div>
     </div>
+    <div class="form-group">
+        <label for="work_images">@lang('Update Work Images')</label>
+        <input type="file" class="form-control" name="work_images[]" id="work_images" multiple>
+        <div class="row mt-3" id="preview-container"></div>
+    </div>
+
+
+
+
+
 
     @if (Auth::user()->role_id == 1)
     <div class="col-md-12">
@@ -171,6 +179,8 @@
         document.addEventListener("DOMContentLoaded", function() {
             toggleMessageField();
         });
+
+
     </script>
     @endif
 
@@ -179,17 +189,17 @@
             @if($user->barber->is_verified==0)
             <button type="submit" class="btn btn-primary" id="update-details-btn">
                 <i class="fa fa-refresh"></i>
-                @lang('Review On Process...')
+                @lang('Upload Again')
             </button>
             @elseif ($user->barber->is_verified==1)
-            <button type="submit" class="btn btn-success" id="update-details-btn">
+            <button type="" class="btn btn-success" id="update-details-btn">
                 <i class="fa fa-refresh"></i>
                 @lang('Review Completed Successfully...')
             </button>
             @else
             <button type="submit" class="btn btn-danger" id="update-details-btn">
                 <i class="fa fa-refresh"></i>
-                @lang('Sorry! Your Application is Rejected...')
+                @lang('Upload Again')
             </button>
             @endif
         </div>
@@ -204,3 +214,4 @@
     </div>
     @endif
 </div>
+

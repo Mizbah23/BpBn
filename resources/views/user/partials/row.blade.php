@@ -13,11 +13,11 @@
     <td class="align-middle">{{ $user->phone }}</td>
     <td class="align-middle">{{ $user->created_at->format(config('app.date_format')) }}</td>
     <td class="align-middle">
-                             @if($user->role_id==2)
-                              {{ strtoupper($user->barber->work_status) }}
-                              @else
-                              {{'Not Valid'}}
-                             @endif
+        @if($user->role_id == 2)
+            {{ isset($user->barber) ? strtoupper($user->barber->work_status) : '---' }}
+        @else
+            {{ 'Not Valid' }}
+        @endif
     </td>
 
     <td class="align-middle">{{ isset($user->bonus)? $user->bonus->total_earnings:'Not Valid' }}</td>
