@@ -46,7 +46,7 @@
                     <div class="col-md-4 avatar-source" id="no-photo"
                          data-url="{{ $updateUrl }}">
                         <img src="{{ url('assets/img/profile.png') }}" class="rounded-circle img-thumbnail img-responsive">
-                        <p class="mt-3">@lang('No Photo')</p>
+                        <p class="mt-3">@lang('No Photo')</p>  
                     </div>
                     <div class="col-md-4 avatar-source">
                         <div class="btn btn-light btn-upload">

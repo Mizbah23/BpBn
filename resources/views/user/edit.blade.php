@@ -83,7 +83,7 @@
                               method="POST"
                               id="login-details-form">
                             @csrf
-                            {{-- @method('PUT') --}}
+                            @method('PUT')
                             @include('user.partials.auth')
                         </form>
 

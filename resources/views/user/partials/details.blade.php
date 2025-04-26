@@ -21,7 +21,6 @@
             <label>@lang('Experience')</label>
             <input type="text" class="form-control input-solid" id="experience"
             name="experience" placeholder="@lang('Experience')" value="{{ $user->barber->experience }}">
-
         </div>
     </div>
 
@@ -135,13 +134,9 @@
     </div>
     <div class="form-group">
         <label for="work_images">@lang('Update Work Images')</label>
-        <input type="file" class="form-control" name="work_images[]" id="work_images" multiple>
+        <input type="file" class="form-control" name="work_images[]" id="work_image" multiple>
         <div class="row mt-3" id="preview-container"></div>
     </div>
-
-
-
-
 
 
     @if (Auth::user()->role_id == 1)

@@ -40,14 +40,14 @@ class DetailsController extends Controller
         // $barber->experience = implode(',', $request->experience);
         $barber->bkash_number=$request->bkash;
 
-        if ($request->work_images) {
+        if ($request->file('work_images')) {
 
                $workImagePaths = [];
 
             foreach ($request->file('work_images') as $image) {
+                // dd($image);
                 if ($image->isValid()) {
                     $file = $image; // Single file upload
-                    dd($file);
                     $filename = time() . '_' . $file->getClientOriginalName();
                     $file->move(public_path()."/app/public/upload/work/", $filename);
 
@@ -62,6 +62,13 @@ class DetailsController extends Controller
         $barber->is_verified=0;
         //  $barber->is_verified=0;
         $barber->update();
+
+        $user = $this->users->find($request->user_id);
+
+        $user->first_name = $request->first_name;
+        $user->phone = $request->phone;
+        $user->address = $request->address;
+        $user->save();
 
         return redirect()->back()
             ->withSuccess(__('Profile updated successfully.'));
